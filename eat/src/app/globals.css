@@ -1,0 +1,303 @@
+@import "tailwindcss";
+
+/* Eat — bone-white editorial. Huge type, thin black lines, chili where it counts.
+   Inspired by siberia.es: mono structure, italic serif emotion, space as luxury. */
+:root {
+  --bg: #f0efea;          /* bone */
+  --bg-raised: #e9e7e0;
+  --bg-card: #f7f6f2;
+  --line: #0d0c0a;        /* thin black rules everywhere */
+  --line-soft: #d6d3ca;
+  --ink: #0d0c0a;
+  --ink-dim: #55524a;
+  --ink-faint: #8f8a7e;
+  --accent: #e8552f;      /* chili */
+  --accent-soft: #e8552f1a;
+  --ok: #3d7a3d;
+  --dead: #b5b1a6;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-raised: var(--bg-raised);
+  --color-card: var(--bg-card);
+  --color-line: var(--line);
+  --color-soft: var(--line-soft);
+  --color-ink: var(--ink);
+  --color-dim: var(--ink-dim);
+  --color-faint: var(--ink-faint);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-ok: var(--ok);
+  --color-dead: var(--dead);
+  --font-display: var(--font-fraunces);
+  --font-mono: var(--font-fragment);
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-fragment), ui-monospace, monospace;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+
+.display {
+  font-family: var(--font-fraunces), Georgia, serif;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-fraunces), Georgia, serif;
+  letter-spacing: -0.02em;
+}
+
+.mono-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+/* subtle paper grain */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 50;
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card-in { animation: card-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+@keyframes count-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25); color: var(--accent); }
+  100% { transform: scale(1); }
+}
+.count-pop { animation: count-pop 0.5s ease; }
+
+.card-dead {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+/* the big craving input caret in chili */
+.craving-input { caret-color: var(--accent); }
+.craving-input::placeholder { color: var(--ink-faint); opacity: 1; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee { animation: marquee 40s linear infinite; }
+
+::selection { background: var(--accent); color: var(--bg); }
+
+/* ————————————————————————————————— biz themes —————————————————————————————————
+   Scoped skins. Each theme rewrites the token vars inside its wrapper; Tailwind
+   classes (bg-card, border-line, …) pick them up automatically. Full pages get
+   .theme-page (background layers + flying objects); promo cards carry the same
+   data attribute and inherit only the palette + type. */
+
+[data-biz-theme] {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.theme-page {
+  position: relative;
+  min-height: 100dvh;
+  isolation: isolate;
+}
+/* decoration layers */
+.theme-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.theme-page::after {
+  position: fixed;
+  z-index: 40;
+  pointer-events: none;
+  font-size: 2.2rem;
+  top: 0;
+  left: -8%;
+}
+
+@keyframes fly-across {
+  0% { transform: translate(0, 12vh) rotate(-8deg); }
+  50% { transform: translate(60vw, 55vh) rotate(10deg); }
+  100% { transform: translate(120vw, 20vh) rotate(-8deg); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-14px) rotate(5deg); }
+}
+
+/* bone = default, no overrides */
+
+[data-biz-theme="minimal"] {
+  --line: #d6d3ca;
+  --accent: #0d0c0a;
+  letter-spacing: 0.01em;
+}
+/* minimal's design element is the absence of design elements */
+
+[data-biz-theme="dark"] {
+  --bg: #121110;
+  --bg-raised: #1c1a18;
+  --bg-card: #191715;
+  --line: #f0efea;
+  --line-soft: #3a3733;
+  --ink: #f0efea;
+  --ink-dim: #b5b1a6;
+  --ink-faint: #7a766c;
+  --accent: #ff3b1f;
+}
+.theme-page[data-biz-theme="dark"]::before {
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(255, 59, 31, 0.14), transparent 70%),
+    radial-gradient(40% 30% at 85% 90%, rgba(255, 59, 31, 0.08), transparent 70%);
+}
+.theme-page[data-biz-theme="dark"]::after {
+  content: "🔥";
+  animation: fly-across 26s linear infinite;
+  opacity: 0.5;
+}
+
+[data-biz-theme="funny"] {
+  --bg: #fff8d6;
+  --bg-raised: #ffefad;
+  --bg-card: #fffdf0;
+  --accent: #ff5c00;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+[data-biz-theme="funny"] .display,
+[data-biz-theme="funny"] h1,
+[data-biz-theme="funny"] h2,
+[data-biz-theme="funny"] h3,
+[data-biz-theme="funny"] .mono-label {
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+.theme-page[data-biz-theme="funny"]::before {
+  background-image: radial-gradient(rgba(255, 92, 0, 0.16) 3px, transparent 3px);
+  background-size: 34px 34px;
+}
+.theme-page[data-biz-theme="funny"]::after {
+  content: "🐓";
+  animation: fly-across 14s linear infinite;
+}
+[data-biz-theme="funny"] article,
+[data-biz-theme="funny"] a[href^="/p/"] {
+  transform: rotate(-0.7deg);
+}
+[data-biz-theme="funny"] article:nth-child(even),
+[data-biz-theme="funny"] a[href^="/p/"]:nth-child(even) {
+  transform: rotate(0.9deg);
+}
+article[data-biz-theme="funny"] {
+  transform: rotate(-0.7deg);
+}
+
+[data-biz-theme="cringe"] {
+  --bg: #ffd6f2;
+  --bg-raised: #ffb8e8;
+  --bg-card: #fff0fa;
+  --line: #a100a1;
+  --ink: #5c005c;
+  --ink-dim: #a100a1;
+  --ink-faint: #cc66cc;
+  --accent: #00c8ff;
+}
+.theme-page[data-biz-theme="cringe"] {
+  background: linear-gradient(120deg, #ffd6f2, #d6e4ff, #fff3c4, #ffd6f2);
+  background-size: 300% 300%;
+  animation: cringe-bg 12s ease infinite;
+}
+@keyframes cringe-bg {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.theme-page[data-biz-theme="cringe"]::after {
+  content: "✨";
+  animation: fly-across 9s linear infinite;
+}
+[data-biz-theme="cringe"] h1 {
+  background: linear-gradient(90deg, #ff00cc, #3333ff, #00cc99, #ffcc00, #ff00cc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: cringe-shift 4s linear infinite;
+  background-size: 300% 100%;
+}
+@keyframes cringe-shift {
+  from { background-position: 0% 0; }
+  to { background-position: 300% 0; }
+}
+[data-biz-theme="cringe"] * {
+  cursor: crosshair;
+}
+
+[data-biz-theme="kopitiam"] {
+  --bg: #eaf3ec;
+  --bg-raised: #d8e8dc;
+  --bg-card: #f6faf7;
+  --line: #14532d;
+  --ink: #14532d;
+  --ink-dim: #3f6f52;
+  --ink-faint: #7fa38c;
+  --accent: #c0392b;
+}
+/* marble-table veins + tile edge */
+.theme-page[data-biz-theme="kopitiam"]::before {
+  background-image:
+    repeating-linear-gradient(105deg, transparent 0 46px, rgba(20, 83, 45, 0.06) 46px 48px),
+    repeating-linear-gradient(15deg, transparent 0 64px, rgba(20, 83, 45, 0.05) 64px 66px);
+}
+.theme-page[data-biz-theme="kopitiam"]::after {
+  content: "☕";
+  animation: bob 5s ease-in-out infinite;
+  top: auto;
+  bottom: 6vh;
+  left: auto;
+  right: 5vw;
+  opacity: 0.7;
+}
+
+[data-biz-theme="y2k"] {
+  --bg: #0a0a2e;
+  --bg-raised: #16165a;
+  --bg-card: #111147;
+  --line: #00ffee;
+  --line-soft: #2a2a7a;
+  --ink: #00ffee;
+  --ink-dim: #8f8fff;
+  --ink-faint: #5c5cb8;
+  --accent: #ff00ff;
+}
+/* starfield */
+.theme-page[data-biz-theme="y2k"]::before {
+  background-image:
+    radial-gradient(#ffffffcc 1px, transparent 1px),
+    radial-gradient(#8f8fff88 1px, transparent 1px);
+  background-size: 140px 140px, 90px 90px;
+  background-position: 0 0, 45px 60px;
+}
+.theme-page[data-biz-theme="y2k"]::after {
+  content: "💾";
+  animation: fly-across 18s linear infinite;
+}
+[data-biz-theme="y2k"] h1 {
+  text-shadow: 2px 2px 0 #ff00ff, 4px 4px 0 #ffff00;
+}

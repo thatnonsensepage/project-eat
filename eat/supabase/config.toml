@@ -1,0 +1,13 @@
+project_id = "fslrvbpzjfcyqqwpcwtc"
+
+[auth]
+enable_anonymous_sign_ins = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = []
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+[storage.vector]
+enabled = false
