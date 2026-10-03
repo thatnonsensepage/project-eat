@@ -341,7 +341,7 @@ Both batches designed in `docs/superpowers/specs/2026-07-12-nine-features-design
 - **Themes:** `biz.theme` column, picker on the dashboard. Set: `bone` (default) / `minimal` / `funny` / `cringe` / `dark` / `kopitiam` / `y2k`. Themes are full skins — CSS-variable palettes + background patterns + one flying object each (🐓 ✨ 🔥 ☕ 💾). The public `/b/[id]` and `/p/[id]` pages wrap in `.theme-page[data-biz-theme=…]`; homepage promo cards carry the same attribute and inherit palette only. `live_promos` v2 returns `theme`/`photo`/`price` for this. Demo: Uncle Lim = y2k, Bunga Bakery = cringe.
 
 **Admin (`/admin` — live in prod):**
-- Gate: `ADMIN_PASSWORD` env var → sha256 cookie scoped to `/admin`. Local + prod password currently `makan-boss` — rotate when it matters.
+- Gate: `ADMIN_PASSWORD` env var → sha256 cookie scoped to `/admin`. Value lives in `eat/.env.local` (local) and Vercel env (prod) — never in the repo. Rotate when it matters.
 - Tabs: businesses (status dropdown), food categories (CRUD — feeds chips + Big Random), wishlist (grouped, clearable).
 - Admin server actions use the **service-role client** (`eat/src/lib/supabase/admin.ts`) behind the cookie guard. Never import it outside `/admin` actions.
 
