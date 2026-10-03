@@ -13,6 +13,8 @@ owner, next action.
   policies, realtime design, route map, build order, brand voice, deployed
   infra, open items. Read before making architectural changes.
 - `.claude/launch.json` — dev server config (`npm run dev --prefix eat`, port 3000).
+  Dev runs on webpack (`next dev --webpack`): Turbopack 16.2 panics when the
+  folder path contains CJK characters (衣食住行/食). Vercel builds are unaffected.
 
 ## Deployed infra (see CONTEXT.md + handover doc §13 for full detail)
 
